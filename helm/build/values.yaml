@@ -1,0 +1,19 @@
+app:
+  name: hello-spring-cloud
+  namespace: hello-spring-cloud-dev
+  cluster: .apps.cluster-7fnqw.7fnqw.sandbox1538.opentlc.com
+
+git:
+  branch: main
+  repo: https://github.com/rhdh-local-arun/hello-spring-cloud
+  org: rhdh-local-arun
+  name: hello-spring-cloud
+
+image:
+  registry: Quay
+  host: quay.io
+  organization: anattama
+  name: hello-spring-cloud
+
+maven:
+  mirrorUrl: 'https://repo1.maven.org/maven2/'
