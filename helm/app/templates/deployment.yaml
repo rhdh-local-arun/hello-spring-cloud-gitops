@@ -1,0 +1,49 @@
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: hello-spring-cloud-web
+  labels:
+    app.kubernetes.io/name: hello-spring-cloud
+    app.kubernetes.io/component: web
+    {{- include "backstage.labels" . | nindent 4 }}
+    {{- include "springboot-template.labels" . | nindent 4 }}
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 20%
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: hello-spring-cloud
+      app.kubernetes.io/component: web
+  template:
+    metadata:
+      name: hello-spring-cloud-web
+      labels:
+        app.kubernetes.io/name: hello-spring-cloud
+        app.kubernetes.io/component: web
+        {{- include "backstage.labels" . | nindent 8 }}
+        {{- include "springboot-template.selectorLabels" . | nindent 8 }}
+    spec:
+      terminationGracePeriodSeconds: 60
+      serviceAccountName: hello-spring-cloud
+      containers:
+      - name: hello-spring-cloud-web
+        image: "quay.io/anattama/hello-spring-cloud:latest"
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 9090
+            protocol: TCP
+        env:
+          - name: PORT
+            value: "9090"
+        livenessProbe:
+          tcpSocket:
+            port: 9090
+          periodSeconds: 30
+          timeoutSeconds: 1
+
